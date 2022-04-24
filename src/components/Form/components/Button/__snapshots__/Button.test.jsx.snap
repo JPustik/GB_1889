@@ -1,0 +1,10 @@
+
+exports[`Button render with snapshot 1`] = `
+<DocumentFragment>
+  <button
+    type="submit"
+  >
+    click
+  </button>
+</DocumentFragment>
+`;
