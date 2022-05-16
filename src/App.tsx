@@ -1,5 +1,6 @@
 import React, { FC, useState, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import { ThemeContext, defaultContext } from './utils/ThemeContext';
 import { Header } from './components/Header';
 import { Home } from './pages/Home';
