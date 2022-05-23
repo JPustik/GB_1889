@@ -2,7 +2,7 @@ import React, { FC, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ThemeContext } from './../utils/ThemeContext';
-import { changeName, toggleProfile } from '../store/profile/actions';
+import { changeName, toggleProfile } from '../store/profile/slice';
 import { selectName, selectVisible } from 'src/store/profile/selectors';
 
 export const Profile: FC = () => {
@@ -23,7 +23,7 @@ export const Profile: FC = () => {
       <hr />
       <div>
         <p>{name}</p>
-        <input type="checkbox" checked={visible} />
+        <input type="checkbox" checked={visible} readOnly />
         <button onClick={() => dispatch(toggleProfile())}>
           change visible
         </button>

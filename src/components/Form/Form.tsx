@@ -1,20 +1,31 @@
-import React, { useState, FC, memo } from 'react';
 import { Input } from '@mui/material';
-import { Button } from './components/Button';
+import { ThunkDispatch } from 'redux-thunk';
 import { useDispatch } from 'react-redux';
-import { addMessage } from 'src/store/chats/actions';
 import { useParams } from 'react-router-dom';
+import React, { FC, memo, useState } from 'react';
+
+import { AUTHOR } from 'src/constants';
+import { AddMessage } from 'src/store/chats/types';
+import { Button } from './components/Button';
+import { ChatsState } from 'src/store/chats/reducer';
+import { addMessageWithReply } from 'src/store/chats/slice';
 
 export const Form: FC = memo(() => {
   const [value, setValue] = useState('');
   const { chatId } = useParams();
-  const dispatch = useDispatch();
+  const dispatch =
+    useDispatch<ThunkDispatch<ChatsState, void, ReturnType<AddMessage>>>();
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (chatId) {
-      dispatch(addMessage(chatId, value));
+    if (chatId && value) {
+      dispatch(
+        addMessageWithReply({
+          chatId,
+          message: { author: AUTHOR.USER, text: value },
+        })
+      );
     }
     setValue('');
   };

@@ -1,19 +1,45 @@
-import { createStore, compose, combineReducers } from 'redux';
-import { profileReducer, ProfileState } from './profile/reducer';
-import { chatReducer, ChatsState } from './chats/reducer';
+import { combineReducers } from 'redux';
+import storage from 'redux-persist/lib/storage';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from 'redux-persist';
 
-export const composeEnhancers =
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+import { configureStore } from '@reduxjs/toolkit';
 
-export interface StoreState {
-  profile: ProfileState;
-  chats: ChatsState;
-}
+import { chatsReducer } from './chats/slice';
+import { profileReducer } from './profile/slice';
 
-export const store = createStore(
-  combineReducers<StoreState>({
-    profile: profileReducer,
-    chats: chatReducer,
-  }),
-  composeEnhancers()
-);
+export type StoreState = ReturnType<typeof rootReducer>;
+
+const persistConfig = {
+  blacklist: [],
+  key: 'root',
+  storage,
+};
+
+const rootReducer = combineReducers({
+  chats: chatsReducer,
+  profile: profileReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+  reducer: persistedReducer,
+});
+
+export const persistor = persistStore(store);
