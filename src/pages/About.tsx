@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import React, { FC } from 'react';
 import { StoreState } from 'src/store';
-import { toggleProfile } from 'src/store/profile/actions';
+import { toggleProfile } from 'src/store/profile/slice';
 
 interface AboutProps {
   visible: boolean;
